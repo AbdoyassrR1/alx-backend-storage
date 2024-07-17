@@ -1,27 +1,23 @@
 #!/usr/bin/env python3
-"""provides some stats about Nginx logs stored in MongoDB"""
+""" MongoDB Operations with Python using pymongo """
 from pymongo import MongoClient
 
+if __name__ == "__main__":
+    """ Provides some stats about Nginx logs stored in MongoDB """
+    client = MongoClient('mongodb://127.0.0.1:27017')
+    nginx_collection = client.logs.nginx
 
-def log_stat():
-    """provides some stats about Nginx logs stored in MongoDB"""
-    client = MongoClient("localhost", 27017)
-    logs = client.logs
-    nginx = logs.nginx
+    n_logs = nginx_collection.count_documents({})
+    print(f'{n_logs} logs')
 
-    logs_count = nginx.count_documents({})
-    get_method = nginx.count_documents({"method": "GET"})
-    post_method = nginx.count_documents({"method": "POST"})
-    put_method = nginx.count_documents({"method": "PUT"})
-    patch_method = nginx.count_documents({"method": "PATCH"})
-    delete_method = nginx.count_documents({"method": "DELETE"})
-    status = nginx.count_documents({"path": "/status"})
-    print(f"{logs_count} logs")
-    print(f'\tmethod GET: {get_method}')
-    print(f'\tmethod POST: {post_method}')
-    print(f'\tmethod PUT: {put_method}')
-    print(f'\tmethod PATCH: {patch_method}')
-    print(f'\tmethod DELETE: {delete_method}')
-    print(f'{status} status check')
+    methods = ["GET", "POST", "PUT", "PATCH", "DELETE"]
+    print('Methods:')
+    for method in methods:
+        count = nginx_collection.count_documents({"method": method})
+        print(f'\tmethod {method}: {count}')
 
-log_stat()
+    status_check = nginx_collection.count_documents(
+        {"method": "GET", "path": "/status"}
+    )
+
+    print(f'{status_check} status check')
