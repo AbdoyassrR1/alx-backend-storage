@@ -16,8 +16,12 @@ def log_stat():
     patch_method = nginx.count_documents({"method": "PATCH"})
     delete_method = nginx.count_documents({"method": "DELETE"})
     status = nginx.count_documents({"path": "/status"})
-    print(f"{logs_count} logs\n\
-Methods:\n\tmethod GET: {get_method}\n\
-\tmethod POST: {post_method}\n\tmethod PUT: {put_method}\n\
-\tmethod PATCH: {patch_method}\n\tmethod DELETE: {delete_method}\n\
-{status} status check")
+    print(f"{logs_count} logs")
+    print(f'\tmethod GET: {get_method}')
+    print(f'\tmethod POST: {post_method}')
+    print(f'\tmethod PUT: {put_method}')
+    print(f'\tmethod PATCH: {patch_method}')
+    print(f'\tmethod DELETE: {delete_method}')
+    print(f'{status} status check')
+
+log_stat()
