@@ -3,14 +3,15 @@
 import requests
 import redis
 from functools import wraps
+from typing import Callable
 
 store = redis.Redis()
 
 
-def count_url_access(method):
+def count_url_access(method: callable):
     """ Decorator counting how many times the URL is accessed """
     @wraps(method)
-    def wrapper(url):
+    def wrapper(url: str):
         """wrapper func"""
         cached_key = "cached:" + url
         cached_data = store.get(cached_key)
